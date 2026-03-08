@@ -1,5 +1,0 @@
-outputdir: /Users/ruixueli/Downloads/energy_data_release/OUTPUT/projection_system_outputs/raw_projection_output/impacts-blueghost/median_OTHERIND_electricity_TINV_clim_lininter_double_GMFD
-weighting: population
-levels-unit: GJ
-aggregated-unit: GJ
-only-farmers: ['', 'histclim']
