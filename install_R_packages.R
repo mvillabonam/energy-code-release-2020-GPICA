@@ -1,9 +1,7 @@
 # Install R packages
 
-# to fix reticulate
-install.packages("devtools", repos="http://cran.us.r-project.org")
-library("devtools")
-devtools::install_github("rstudio/reticulate", repos="http://cran.us.r-project.org")
+# Install reticulate from CRAN binary to avoid requiring Rtools on Windows.
+install.packages("reticulate", repos="http://cran.us.r-project.org")
 
 list.of.packages <- c("readr","tidyverse", "haven","Rcpp", "imputeTS",
  "ggplot2", "DescTools", "mvtnorm", "magrittr", "dplyr", 

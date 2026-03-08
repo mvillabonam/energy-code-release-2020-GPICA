@@ -295,14 +295,16 @@ Este repositorio contiene el codigo y las instrucciones para producir los result
 1. Clona este repositorio en un directorio de trabajo (llamado `yourREPO`):
 
 ```bash
-cd <yourREPO>
+cd C:\Users\juago\Documents\GitHub\energy-code-release-2020-GPICA
 git clone https://github.com/ClimateImpactLab/energy-code-release-2020.git
 ```
 
 2. Instala el entorno `conda` incluido en el repositorio:
 
 ```bash
-cd <yourREPO>/energy-code-release-2020
+cd C:/Users/juago/Documents/GitHub/energy-code-release-2020-GPICA
+
+
 conda env create -f energy_env_py3.yaml
 conda activate energy_env_py3
 ```
