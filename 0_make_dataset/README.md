@@ -113,3 +113,123 @@ Through this data testing we motivate the first differencing completed in `Step 
 ### Code Outputs:
 * `<yourDATA>/OUTPUT/figures/fig_Appendix-A1_ITA_other_fuels_time_series_regimes.pdf`
 * `<yourDATA>/OUTPUT/figures/fig_Appendix-A2_Unit_Root_Tests_p_val_hists_electricity.pdf`
+
+---
+
+# Versión en Español
+
+# Instrucciones de ejecución
+Para ejecutar todo el código de este directorio, ejecuta `./0_make_dataset.sh`. 
+
+**Nota importante:** Los datos crudos utilizados aquí no están disponibles públicamente. 
+* Por lo tanto, solo pueden ejecutarse [2_construct_regression_ready_data.do](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/2_construct_regression_ready_data.do), 
+[3_unit_root_test_and_plot.do](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/3_unit_root_test_and_plot.do), y
+[4_plot_ITA_other_energy_regimes_timeseries.R](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/4_plot_ITA_other_energy_regimes_timeseries.R)
+de esta carpeta (códigos que usan datos intermedios como entrada) por usuarios externos al Climate Impact Lab. 
+* El dataset intermedio `IEA_merged_long.dta` es generado por [1_construct_dataset_from_raw_inputs.do](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/1_construct_dataset_from_raw_inputs.do), y no puede ejecutarse.
+
+# Estructura de carpetas
+
+`climate` - código y shapefiles para construir, limpiar y ensamblar datos climáticos
+
+`coded_issues` - problemas codificados y documentación usados para construir regímenes de reporte, limpiar datos de consumo de energía y construir datos climáticos
+
+`energy_load` - código para limpiar datos crudos de consumo de energía
+
+`pop_and_income` - código para limpiar datos de población e ingreso
+
+`merged` - código para limpiar el dataset fusionado
+
+**Debido a que los datos crudos no están disponibles actualmente, el código en `climate`, `energy_load`, y `pop_and_income` no puede ejecutarse y solo está presente como referencia.**
+
+# Scripts principales del directorio
+
+Los códigos en esta carpeta realizan las siguientes tareas:
+* Construir un dataset intermedio que incluye datos de población, consumo de energía, clima e ingreso. 
+    * `<yourDATA>/DATA/regression/IEA_merged_long_GMFD.dta`: 
+    * Limpiamos IEA_merged_long.dta de dos maneras diferentes para producir datasets listos para regresión tanto para nuestra especificación principal (*Métodos* Ecuación 2; *Apéndice* Ecuación C.4) como para modelos de robustez;
+* Construir datos listos para regresión:
+    * `DATA/regression/GMFD_TINV_clim_EX_regsort.dta`: usado para estimar el modelo excluyendo datos imputados (*Apéndice* I.2)
+    * `DATA/regression/GMFD_TINV_clim_regsort.dta`: usado para estimar el modelo principal
+* Guardar información sobre covariables de ingreso y clima de cada país-año, que se usa como entrada para código de graficación
+    * `<yourDATA>/DATA/regression/break_data_TINV_clim_EX.dta`: usado para graficar salidas del modelo excluyendo datos imputados
+    * `<yourDATA>/DATA/regression/break_data_TINV_clim.dta`: usado para graficar salidas del modelo principal
+* Probar la existencia de raíces unitarias en nuestra variable de resultado, motivando la necesidad de usar variables en primeras diferencias en nuestro análisis empírico
+
+## Construcción del Dataset Intermedio (IEA_merged_long.dta)
+
+[1_construct_dataset_from_raw_inputs.do](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/1_construct_dataset_from_raw_inputs.do) produce IEA_merged_long.dta mediante los siguientes pasos:
+1. Limpiar y construir datasets de población, ingreso, clima y consumo de energía
+2. Fusionar datos de población, ingreso, clima y energía por país y año
+
+### Entradas del código:
+* datos crudos no disponibles
+
+### Salidas del código:
+* `<yourDATA>/DATA/regression/IEA_merged_long_GMFD.dta`
+
+## Construcción del Dataset Listo para Regresión (GMFD_TINV_clim_*_regsort.dta)
+
+[2_construct_regression_ready_data.do](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/2_construct_regression_ready_data.do) puede producir tanto `GMFD_TINV_clim_EX_regsort.dta` como `GMFD_TINV_clim_regsort.dta` mediante los siguientes pasos:
+1. Construir regímenes de reporte y eliminar datos según problemas de datos codificados
+2. Emparejar datos climáticos específicos del producto con el producto
+    * el clima es específico del producto debido a los problemas de datos codificados. Consulta este [climate/README.md](https://github.com/ClimateImpactLab/energy-code-release-2020/tree/master/0_make_dataset/climate) para más información sobre el tema.
+3. Encontrar la ubicación del nudo del spline de ingreso para modelar un efecto no lineal del ingreso sobre la sensibilidad energía-temperatura
+4. Realizar pasos finales de limpieza antes de la construcción de variables interactuadas en primeras diferencias
+	* Clasificar países dentro de 1 de 13 regiones de la ONU -- estas regiones se usan para construir uno de los efectos fijos usados en el análisis
+	* Clasificar países en deciles y grupos de ingreso -- fusionar grupos de ingreso construidos desde (3) en el dataset principal
+5. Construir variables interactuadas en primeras diferencias usadas en la sección de análisis
+
+***Nota:*** al inicio de `2_construct_regression_ready_data.do` establece la macro global ***model*** a `TINV_clim` para producir datos listos para regresión del modelo principal y a `TINV_clim_EX` para producir datos listos para regresión del modelo excluyendo datos imputados.
+
+### Entradas del código:
+* `<yourDATA>/DATA/regression/IEA_merged_long.dta`
+
+### Salidas del código:
+* `<yourDATA>/DATA/regression/GMFD_TINV_clim*_regsort.dta`
+
+## Construcción de Datasets Intermedios de Covariables (break_data_TINV_clim_*.dta)
+
+Además de producir los datasets listos para regresión, [2_construct_regression_ready_data.do](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/2_construct_regression_ready_data.do) 
+puede producir tanto `break_data_TINV_clim.dta` como `break_data_TINV_clim_EX.dta`. Estos son datasets 
+intermedios que se generan para graficar arrays 3x3. Estos datasets contienen información de covariables para cada 
+país-año, incluyendo:
+* Ingreso: 
+    * Decil de la distribución general de ingreso de nuestras observaciones (`gpid`)
+    * Tercil de la distribución general de ingreso de nuestras observaciones (`tpid`)
+    * Agrupaciones de ingreso basadas en la ubicación del nudo (`largegpid_*`), nota: estas varían por producto. 
+        * Ver el Apéndice del Paper Sección C.3 para discusión de qué son estos nudos.  
+    * Valores promedio de la covariable de ingreso de largo plazo, dentro de cada tercil de CDD (`avgInc_tgpid`)
+    * Valores máximos de la covariable de ingreso de largo plazo dentro de cada grupo de ingreso (`maxInc_largegpid_other_energy` y `maxInc_largegpid_electricity`)
+
+* Clima
+    * Tercil de la distribución de CDDs de largo plazo (`tpid`)
+    * Valor promedio de la covariable de HDD de largo plazo, dentro de cada tercil de ingreso (`avgHDD_tpid`)
+    * Valor promedio de la covariable de CDD de largo plazo, dentro de cada tercil de ingreso (`avgCDD_tpid`)
+
+***Nota:*** al inicio de `2_construct_regression_ready_data.do` establece la macro global ***model*** a `TINV_clim` para producir datos listos para regresión del modelo principal y a `TINV_clim_EX` para producir esta información de covariables del modelo excluyendo datos imputados.
+
+### Entradas del código:
+* `<yourDATA>/DATA/regression/IEA_merged_long.dta`
+
+### Salidas del código:
+* `<yourDATA>/DATA/regression/break_data_TINV_clim.dta`
+* `<yourDATA>/DATA/regression/break_data_TINV_clim_EX.dta`
+
+## Prueba de existencia de raíces unitarias en nuestra variable de resultado
+A través de este análisis de datos motivamos el uso de primeras diferencias completado en el `Paso 5` de **Construcción del Dataset Listo para Regresión**
+
+[`3_unit_root_test_and_plot.do`](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/3_unit_root_test_and_plot.do) toma el dataset listo para regresión creado en [2_construct_regression_ready_data.do](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/2_construct_regression_ready_data.do), y prueba la existencia de raíces unitarias en la variable load_pc.
+* El código implementa las pruebas descritas en la Sección Apéndice A.1 del paper. 
+* Las figuras generadas son aquellas en el paper como Figura de Apéndice A.2
+
+[`4_plot_ITA_other_energy_regimes_timeseries.R`](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/4_plot_ITA_other_energy_regimes_timeseries.R) toma el dataset listo para regresión creado en [2_construct_regression_ready_data.do](https://github.com/ClimateImpactLab/energy-code-release-2020/blob/master/0_make_dataset/2_construct_regression_ready_data.do), y grafica una visualización simple de la serie de tiempo para Italia - Otros combustibles.
+* La figura generada está en el paper como Figura de Apéndice A.1
+
+
+### Entradas del código:
+* `<yourDATA>/DATA/regression/GMFD_TINV_clim_regsort.dta`
+
+### Salidas del código:
+* `<yourDATA>/OUTPUT/figures/fig_Appendix-A1_ITA_other_fuels_time_series_regimes.pdf`
+* `<yourDATA>/OUTPUT/figures/fig_Appendix-A2_Unit_Root_Tests_p_val_hists_electricity.pdf`
