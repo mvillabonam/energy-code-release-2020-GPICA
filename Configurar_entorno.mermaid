@@ -1,0 +1,15 @@
+flowchart TD
+
+A[Inicio: Preparación del proyecto] --> B[Clonar repositorio<br>energy-code-release-2020]
+
+B --> C[Crear entorno Conda<br>energy_env_py3.yaml]
+
+C --> D[Activar entorno<br>conda activate energy_env_py3]
+
+D --> E[Instalar dependencias<br>Python, R y Stata]
+
+E --> F[Configurar rutas de datos<br>yourREPO / yourDATA]
+
+F --> G[Verificar entorno<br>ejecutar scripts de prueba]
+
+G --> H[Entorno listo<br>Continuar con Step 1]

@@ -1,0 +1,23 @@
+flowchart TD
+
+A[Dataset limpio del Step 1<br>GMFD_*_regsort.dta] --> B[Estimación de la relación<br>temperatura-consumo energético]
+
+B --> C1[Regresiones globales<br>respuesta promedio mundial]
+
+B --> C2[Regresiones por deciles de ingreso<br>heterogeneidad por nivel de ingreso]
+
+B --> C3[Regresiones con interacciones<br>ingreso y clima]
+
+C1 --> D1[Estimación mediante FGLS]
+C2 --> D2[Estimación mediante FGLS]
+C3 --> D3[Estimación mediante FGLS]
+
+D1 --> E1[Resultados de regresión<br>archivos .ster]
+D2 --> E2[Resultados de regresión<br>archivos .ster]
+D3 --> E3[Resultados de regresión<br>archivos .ster]
+
+E1 --> F[Generación de figuras]
+E2 --> F
+E3 --> F
+
+F --> G[Figuras del paper<br>respuesta temperatura-energía]

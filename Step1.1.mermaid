@@ -1,0 +1,35 @@
+flowchart TD
+
+A[Datos crudos: energía, clima, población e ingreso<br>(no disponibles públicamente)] --> B[1_construct_dataset_from_raw_inputs.do]
+
+B --> C[Construcción de dataset intermedio<br>IEA_merged_long_GMFD.dta]
+
+C --> D[2_construct_regression_ready_data.do]
+
+D --> E[Construcción de regímenes de reporte<br>y eliminación de datos problemáticos]
+
+E --> F[Emparejar datos climáticos con tipo de energía]
+
+F --> G[Calcular knots de splines de ingreso<br>para modelar no linealidad]
+
+G --> H[Clasificar países por regiones ONU<br>y deciles de ingreso]
+
+H --> I[Construcción de variables en primeras diferencias<br>e interacciones]
+
+I --> J[Dataset final para regresión]
+
+J --> K1[GMFD_TINV_clim_regsort.dta<br>(modelo principal)]
+J --> K2[GMFD_TINV_clim_EX_regsort.dta<br>(modelo sin datos imputados)]
+
+D --> L[Dataset auxiliar para gráficos]
+
+L --> M1[break_data_TINV_clim.dta]
+L --> M2[break_data_TINV_clim_EX.dta]
+
+K1 --> N[3_unit_root_test_and_plot.do]
+
+N --> O[Pruebas de raíz unitaria<br>y Figura Appendix A.2]
+
+K1 --> P[4_plot_ITA_other_energy_regimes_timeseries.R]
+
+P --> Q[Serie temporal Italia<br>Figura Appendix A.1]

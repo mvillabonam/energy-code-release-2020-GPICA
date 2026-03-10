@@ -1,0 +1,22 @@
+flowchart TD
+
+A[Datos de consumo energético<br>IEA World Energy Balances] --> B[Limpieza y validación de datos de energía]
+
+C[Datos climáticos históricos<br>GMFD resolución 0.25° x 0.25°] --> D[Agregación de clima<br>a nivel país-año]
+
+E[Datos de población e ingreso<br>World Bank / IEA] --> F[Limpieza de datos socioeconómicos]
+
+B --> G[Integración de datasets]
+D --> G
+F --> G
+
+G --> H[Construcción del panel final<br>país-año-producto]
+
+H --> I[Transformación de variables<br>primeras diferencias]
+
+I --> J[Creación de splines de ingreso<br>para capturar heterogeneidad]
+
+J --> K[Generación de datasets<br>para análisis econométrico]
+
+K --> L[Dataset de regresión<br>GMFD_*_regsort.dta]
+K --> M[Dataset para gráficos<br>break_data_*.dta]
