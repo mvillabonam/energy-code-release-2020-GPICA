@@ -16,6 +16,15 @@ cd <yourREPO>
 git clone https://github.com/ClimateImpactLab/energy-code-release-2020.git
 ```
 
+Important path note for Stata scripts:
+The analysis `.do` files assume the repository path is `${REPO}/energy-code-release-2020`.
+This means `REPO` should be the parent folder that contains the repository folder, not the repository folder itself.
+
+Example:
+If your local folder is `C:\Users\juago\Documents\GitHub\energy-code-release-2020-GPICA`, then either:
+- rename/create an alias so the folder is available as `energy-code-release-2020`, or
+- set `REPO=C:\Users\juago\Documents\GitHub` and ensure `energy-code-release-2020` exists under that path.
+
 2. Install the `conda` environment included in this repo by running the following commands under the root of this repo:
 
 ```
@@ -108,6 +117,8 @@ export OUTPUT=<yourDATA>/OUTPUT
 export LOG=<yourDATA>/LOG
 
 ```
+For clarity: `REPO` must be the parent directory that contains `energy-code-release-2020`.
+
 Save and exit. 
 Then, run `source ~/.bash_profile` to load the changes we just made.
 
@@ -323,12 +334,18 @@ cd C:\Users\juago\Documents\GitHub\energy-code-release-2020-GPICA
 git clone https://github.com/ClimateImpactLab/energy-code-release-2020.git
 ```
 
+Nota importante de rutas para scripts Stata:
+Los archivos `.do` de analisis asumen que el repositorio esta en `${REPO}/energy-code-release-2020`.
+Por eso, `REPO` debe ser la carpeta padre que contiene el repositorio, no la carpeta del repositorio en si.
+
+Ejemplo:
+Si tu carpeta local es `C:\Users\juago\Documents\GitHub\energy-code-release-2020-GPICA`, entonces:
+- renombra/crea un alias para que exista `energy-code-release-2020`, o
+- define `REPO=C:\Users\juago\Documents\GitHub` y asegurate de que `energy-code-release-2020` exista dentro de esa ruta.
+
 2. Instala el entorno `conda` incluido en el repositorio:
 
 ```bash
-cd C:/Users/juago/Documents/GitHub/energy-code-release-2020-GPICA
-
-
 conda env create -f energy_env_py3.yaml
 conda activate energy_env_py3
 ```
@@ -358,6 +375,8 @@ export DATA=<yourDATA>/DATA
 export OUTPUT=<yourDATA>/OUTPUT
 export LOG=<yourDATA>/LOG
 ```
+
+Aclaracion: `REPO` debe ser el directorio padre que contiene `energy-code-release-2020`.
 
 En Windows, configura estas variables desde el sistema operativo.
 
