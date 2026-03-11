@@ -10,3 +10,6 @@ LOG/
 # Local env files
 energy_env_py2.yaml
 energy_env_py3.yaml
+
+*.sh
+Miniconda3-latest-MacOSX-arm64.sh
